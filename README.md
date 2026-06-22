@@ -35,7 +35,7 @@ Additional metrics include:
 * Active Membership Count
 
 
-## Likely Data Source
+## Data Source
 The project will use data collected and generated through the FINEX platform, including:
 * Membership Records
 * Fines Records
