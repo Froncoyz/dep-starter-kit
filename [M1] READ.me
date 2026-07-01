@@ -1,0 +1,162 @@
+# Philippine Regional Poverty Divergence Tracker
+### 24-Week Data Analytics Program — Phase 1: Foundations | Milestone 1
+
+## Problem Statement (Summary)
+I want to answer: **"Which Philippine regions are closing the poverty gap fastest from 2015 to 2023 — and which ones are being left behind?"**
+
+*(Full problem statement, audience, KPIs, and dashboard design are in M0_README.md)*
+
+---
+## Week 2 — Data Source Discovery & Feasibility Check
+This document records the data sources I investigated this week, what I found inside them, how each one answers the problem statement, and which one I am committing to as my primary source — and why.
+
+---
+
+## Sources Investigated
+I evaluated three PSA sources this week. All are publicly accessible without registration or a data request form.
+
+### Source 1 — PSA OpenSTAT: Full Year Poverty Statistics
+**URL:** https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1E__FY/?tablelist=true
+
+This is the PSA's PX-Web statistical portal. I navigated to the Full Year Poverty Statistics database and confirmed the following tables are present and exportable:
+| Table No. | Title | Format | Years Available |
+|---|---|---|---|
+| Table 1 | Poverty Incidence Among Families + Per Capita Poverty Threshold, by Region and Province | CSV / XLSX | 2015, 2018, 2021, 2023 |
+| Table 1a | Same as Table 1, extended to Highly Urbanized Cities (HUCs) | CSV / XLSX | 2018, 2021, 2023 |
+| Table 2 | Poverty Incidence Among Population, by Region and Province | CSV / XLSX | 2015, 2018, 2021, 2023 |
+| Table 5 | Magnitude of Poor Families ('000), by Region and Province | CSV / XLSX | 2015, 2018, 2021 |
+| Table 6 | Magnitude of Poor Population ('000), by Region and Province | CSV / XLSX | 2015, 2018, 2021 |
+| Table 10 | Income Gap with Measures of Precision, by Region and Province | CSV / XLSX | 2018, 2021, 2023 |
+| Table 11 | Poverty Gap with Measures of Precision, by Region and Province | CSV / XLSX | 2018, 2021, 2023 |
+
+**File format:** Each table is exported as a flat CSV or XLSX file directly from the portal with no login required. Rows represent geographic units (national → region → province). Columns represent the metric values, coefficients of variation, standard errors, and confidence intervals for each survey year.
+
+**Granularity:** National → Regional → Provincial → HUC (city level). The regional and provincial levels are what this project needs. HUC-level data is available from 2018 onward only.
+
+**Update frequency:** Every three years, aligned with the FIES survey cycle. Last updated September 2024 with 2023 data. Next expected update: 2027 (2026 FIES cycle).
+
+**Coverage check against the problem statement:**
+
+| Project KPI | Available in this source? | Table |
+|---|---|---|
+| Poverty incidence (%) among families, by region | ✅ Yes | Table 1 |
+| Poverty incidence (%) among population, by region | ✅ Yes | Table 2 |
+| Annual per capita poverty threshold (PhP), by region | ✅ Yes | Table 1 |
+| Income gap (%), by region | ✅ Yes | Table 10 |
+| Poverty gap (%), by region | ✅ Yes | Table 11 |
+| Magnitude of poor families ('000), by region | ✅ Yes | Table 5 |
+| Point-change in poverty incidence across years | ✅ Computable from Tables 1 & 2 | — |
+| Caraga province-level breakdown | ✅ Yes — all five provinces present | Table 1 |
+
+Every KPI defined in M0 is either directly published in this source or computable from it. No proxy variables or external datasets are needed.
+
+**Known gaps and limitations:**
+- The 2015 tables use a 2006-based CPI, while 2018 onward use a 2012-based CPI. Poverty **thresholds in peso terms** are not directly comparable across cycles. Poverty **incidence rates and income gap percentages** remain comparable because they are relative measures.
+- Provincial estimates for very small provinces carry coefficients of variation above 20%, flagged by PSA as unreliable for ranking. Cluster groupings (poorest, least poor) are used instead of point rankings.
+- BARMM and Sulu 2021 figures were revised post-release due to food price corrections. The portal shows the corrected figures; older cached downloads from early 2022 may not.
+- Table 5 and Table 6 (magnitude of poor) currently show data up to 2021 only. The 2023 magnitude figures are reported in the official PDF publication but have not yet been added to the OpenSTAT portal tables as of the time of this writing.
+- HUC-level data (Table 1a) starts from 2018 — Butuan City's poverty trend, for example, can only be tracked from 2018 forward, not from 2015.
+
+---
+
+### Source 2 — PSA Philippine Statistical Yearbook (PSY), Chapter 2: Income and Prices
+**URL:** https://psa.gov.ph/philippine-statistical-yearbook
+**Direct download (2023 PSY, Chapter 2 Excel):** https://psa.gov.ph/system/files/psy/2_2023.xlsx
+
+This is PSA's annual statistical compendium. Chapter 2 is a single pre-formatted Excel workbook containing key income and poverty tables consolidated from multiple surveys.
+
+**File format:** XLSX. Single file, direct download, no portal interaction. The workbook contains multiple sheets organized by table number. Rows use merged cells for region headers; footnote rows are embedded inline. Some cleaning is needed before analysis.
+
+**Granularity:** Primarily national and regional. Provincial detail is present but less complete than the full OpenSTAT tables. HUC breakdowns are not included in this source.
+
+**Update frequency:** Published annually, but poverty data only refreshes every three years with the FIES. The 2023 PSY reflects the same 2021 poverty figures as OpenSTAT until the 2024 PSY edition incorporates the 2023 FIES data.
+
+**Coverage check against the problem statement:**
+
+| Project KPI | Available in this source? | Notes |
+|---|---|---|
+| Poverty incidence by region | ✅ Yes | Regional level only; less granular than Source 1 |
+| Per capita poverty threshold | ✅ Yes | Regional level |
+| Income gap | ✅ Yes | Regional level |
+| Province-level breakdown for Caraga | ⚠️ Partial | Some provincial rows present, not all |
+| Magnitude of poor families | ✅ Yes | Regional level |
+
+**Known gaps and limitations:**
+- Provincial-level detail for Caraga's five provinces is incomplete in the PSY — using Source 1 is required for the Caraga deep-dive.
+- Excel layout requires preprocessing: merged headers, footnote rows interspersed with data rows, and inconsistent region-code formatting must be resolved before the file is usable.
+- The PSY is published once annually. The 2024 edition (which will include 2023 poverty data) was not yet available at the time of this assessment.
+
+---
+
+### Source 3 — PSA Small Area Estimation (SAE) Poverty Statistics
+**URL:** https://psa.gov.ph/statistics/poverty-sae
+**Data file:** https://psa.gov.ph/statistics/poverty-sae/stat-tables
+
+This is a separate PSA release that uses the Small Area Estimation technique to generate poverty incidence estimates at the municipality and city level — below the provincial granularity of the main FIES tables.
+
+**File format:** XLSX (one file per release cycle, containing all 1,611 cities and municipalities).
+
+**Granularity:** Municipality and city level — the finest geographic detail available for poverty data in the Philippines.
+
+**Update frequency:** Tied to the FIES cycle. 2018 and 2023 SAE releases are available. No 2015 or 2021 SAE data.
+
+**Coverage check against the problem statement:**
+
+| Project KPI | Available in this source? | Notes |
+|---|---|---|
+| Poverty incidence by region | ✅ Yes (aggregated) | Primary purpose is municipality level |
+| Province-level breakdown for Caraga | ✅ Yes | All Caraga municipalities present |
+| Butuan City trend | ⚠️ Two points only | 2018 and 2023 — insufficient for a trend line |
+
+**Known gaps and limitations:**
+- Only two data points are available (2018 and 2023) — not enough for a trend analysis on its own.
+- Not a replacement for Source 1 at regional or provincial level; intended as a supplemental drill-down.
+- Will be incorporated in Weeks 8–12 for the Caraga province deep-dive section, not as a primary analysis source.
+
+---
+
+## Source Decision
+**Primary source: Source 1 — PSA OpenSTAT Full Year Poverty Statistics**
+This is the only source that provides all seven KPIs at regional and provincial granularity across all four survey cycles (2015, 2018, 2021, 2023) in a directly exportable, clean CSV format. Every metric required by the problem statement is confirmed present. No registration, no data request form, no cost.
+
+**Fallback source: Source 2 — PSA Philippine Statistical Yearbook, Chapter 2**
+Selected as the fallback because it covers the same regional poverty data through a completely different access method — a static Excel file download rather than a portal query. If OpenSTAT is inaccessible or the portal structure changes, the PSY provides the regional-level data needed to continue without interruption. The provincial-level gap is the only significant limitation, but the Caraga deep-dive work (Weeks 8–12) can be deferred until OpenSTAT access is restored.
+
+**The two sources have different failure modes:**
+- Source 1 fails if the OpenSTAT portal is down, changes table structure, or requires login.
+- Source 2 fails if the PSY URL changes or the Excel file format is restructured.
+
+Neither failure affects the other. This is the intended redundancy.
+
+**Source 3 (SAE) is neither primary nor fallback** — it is a supplemental source reserved for municipality-level drill-down work in later milestones.
+
+---
+
+## Refresh Architecture
+The dashboard will run on a **semi-automated refresh model** matched to the PSA's three-year FIES cycle. When new data is released (next expected: 2026/2027):
+
+| Step | Action | Who | Time |
+|---|---|---|---|
+| 1 | PSA publishes new FIES cycle data on OpenSTAT | PSA | Every ~3 years |
+| 2 | Download updated CSV exports from OpenSTAT | Developer | ~30 min |
+| 3 | Replace source CSVs in the project `/data` folder | Developer | ~5 min |
+| 4 | Dashboard reads new files on next load; all charts update | Automatic | 0 min |
+| 5 | Check outputs for methodology changes or data anomalies | Developer | ~1–2 hours |
+
+**Design principles that make this work:**
+- No hardcoded survey years — the year column is a dynamic axis, so 2026 data appears as a new point automatically.
+- No hardcoded region list — regions are read from the data, so structural changes (like NIR or BARMM) are reflected automatically.
+- Canonical column schema enforced by a cleaning script — any new OpenSTAT export maps to the same column names regardless of minor formatting changes.
+
+**Known refresh risks:**
+- PSA may change CPI base years or regional compositions again in the 2026 cycle, requiring manual recalibration of historical comparisons.
+- Table 5 and Table 6 (magnitude) may lag behind other tables in being updated on OpenSTAT, as seen with the 2023 cycle.
+- Full provincial data for the new cycle may not be available until 12–18 months after the survey year closes.
+
+**Stretch goal (post-Week 16):** Replace the manual CSV download step with a direct query to the PSA OpenSTAT PX-Web JSON API, making the refresh fully programmatic.
+
+---
+
+*Milestone 0 — Problem Statement | Complete*
+*Milestone 1 — Data Source Discovery & Feasibility Check | Complete*
+*24-Week Data Analytics Foundations Program*
