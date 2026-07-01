@@ -1,89 +1,96 @@
-# dep-starter-kit
+# Philippine Regional Poverty Divergence Tracker
+### 24-Week Data Analytics Program — Phase 1: Foundations
 
-# Project Title | FINEX: Financial Analytics for SJIT Student Organizations
 
 ## Problem Statement
-I want to answer:
-"How can SJIT student organizations improve financial transparency, monitor member obligations, and effectively manage organizational funds through a centralized data-driven system?"
+I want to answer: 
+**"Which Philippine regions are closing the poverty gap fastest from 2015 to 2023 — and which ones are being left behind?"**
 
-Many student organizations at SJIT rely on manual record-keeping methods for managing membership fees, fines, attendance records, budget proposals, and financial reports. These practices can lead to delayed payments, inconsistent records, limited financial visibility, and challenges in generating accurate reports for decision-making.
+More specifically: across four survey cycles (2015, 2018, 2021, 2023), how have poverty incidence, poverty thresholds, and income gaps shifted across all 17 regions? Are the improvements evenly distributed, or is the gap between the richest and poorest regions widening over time?
 
-This project aims to develop FINEX, a financial analytics and management system that centralizes organizational data and provides actionable insights to support financial accountability and informed decision-making.
+A secondary lens: **Where does Caraga (Region XIII) stand in this national picture?** In 2015, Caraga had the second-highest poverty incidence in the country at 39.1 percent. By 2021, it had dropped to 24.1 percent among families. By 2023, Caraga was among the regions that posted statistically significant decreases. Understanding whether this improvement is genuinely converging with national averages — or simply recovering from a deeper baseline — is the local question this project will answer.
+
 
 ## Audience
-This project is intended for:
-* SJIT Student Organization Officers
-* Organization Treasurers
-* Faculty Advisers
-* Office of Student Affairs Personnel
-* College Administrators overseeing student organizations
-
-These stakeholders require accurate and timely information to monitor organizational finances, member compliance, and overall organizational performance.
+This project is for three audiences, each with a different use for the findings:
+- **Regional planners and LGU policy staff (Caraga and comparable regions)** — need to understand whether poverty reduction programs are working faster or slower than the national trend, and which provinces within the region are leading or lagging.
+- **National policymakers and researchers (NEDA, DSWD, academic institutions)** — need a clear cross-regional comparison to identify convergence or divergence patterns that inform budget allocation and social protection targeting.
+- **The developer (me)** — needs a reproducible descriptive analytics project built entirely on verified PSA open data, demonstrating data wrangling, trend analysis, and chart-based storytelling for a portfolio.
 
 
 ## KPI or Key Metric
-The primary KPI is: Collection Rate (%)
-Collection Rate = (Total Amount Collected ÷ Total Amount Due) × 100
+The primary metric is the **Poverty Incidence Rate (%) among families**, tracked per region across four survey years:
 
-Additional metrics include:
-* Outstanding Fines Balance
-* Membership Fee Collection Rate
-* Total Revenue Collected
-* Total Organizational Expenses
-* Budget Utilization Rate
-* Attendance Participation Rate
-* Active Membership Count
+```
+Poverty Incidence = (Number of Poor Families ÷ Total Families) × 100
+```
 
+Supporting metrics:
+| Metric | What it measures |
+|---|---|
+| Poverty Incidence among Population (%) | Share of poor individuals, not just families |
+| Annual Per Capita Poverty Threshold (PhP) | The income floor to escape poverty, adjusted by region |
+| Income Gap (%) | How far below the threshold the average poor family falls |
+| Poverty Gap (%) | Average shortfall as a share of the poverty threshold |
+| Magnitude of Poor Families ('000) | Absolute headcount, not just rates |
+| Point Change in Poverty Incidence | How many percentage points each region improved across periods |
 
-## Data Source
-The project will use data collected and generated through the FINEX platform, including:
-* Membership Records
-* Fines Records
-* Payment Transactions
-* Attendance Logs
-* Budget Proposals
-* Surplus Records
-* Financial Reports
-* Audit Logs
-
-Database Platform:
-* Supabase PostgreSQL
+The **convergence question** — whether poor regions are catching up to rich ones — is answered by plotting the point-change in poverty incidence against the starting poverty level. Regions that started poorest and improved fastest show convergence. Regions that started poorest and improved slowest show divergence.
 
 
-## Possible Final Dashboard
-The dashboard should help organization officers and administrators quickly understand the financial status and operational performance of student organizations.
+## Likely Data Source
+I will use the **PSA Full Year Official Poverty Statistics**, published through OpenSTAT and the PSA Poverty Statistics page.
+Data is publicly available and covers 2015, 2018, 2021, and 2023 at national, regional, and provincial levels.
+
+**Primary access points:**
+- PSA OpenSTAT — Full Year Poverty Statistics: https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1E__FY/?tablelist=true
+- PSA Poverty Statistics main page: https://psa.gov.ph/statistics/poverty
+- PSA Poverty Statistical Tables: https://psa.gov.ph/statistics/poverty/stat-tables
+- 2023 Full Year Poverty Statistics publication (PDF): https://psa.gov.ph/sites/default/files/phdsd/2023%20FY%20Official%20Poverty%20Statistics%20Publication_15August2024.pdf
+
+**Tables to be used:**
+- Table 1: Annual Per Capita Poverty Threshold and Poverty Incidence Among Families, by Region and Province (2018, 2021, 2023)
+- Table 2: Poverty Incidence Among Population, by Region and Province (2018, 2021, 2023)
+- Table 5 & 6: Magnitude of Poor Families and Population, by Region and Province
+- Income Gap and Poverty Gap tables (2018, 2021, 2023)
+- Updated 2015 and 2018 tables (accessible separately via PSA stat-tables page)
 
 
-### Dashboard Components
-1. Financial Overview Dashboard
-   * Total Revenue
-   * Total Expenses
-   * Current Surplus Balance
-   * Collection Rate
 
-2. Membership Analytics
-   * Active Members
-   * Membership Fee Compliance
-   * Membership Growth Trends
+## Possible Final Output
+The final output is a **semi-automated refresh dashboard** — a web-based visualization built so that when PSA releases new FIES-based poverty data (approximately every three years), replacing the source CSV file is all it takes for every chart to update automatically. No chart rebuilding, no code rewriting.
 
-3. Fines and Payment Monitoring
-   * Outstanding Balances
-   * Payment Trends
-   * Collection Performance
+This is the appropriate architecture for this dataset. Because the PSA's FIES-based poverty statistics update on a fixed survey cycle rather than continuously, a real-time live dashboard is not meaningful here — the data simply does not change between cycles. What matters instead is that the dashboard is **designed to absorb the next data release (2026) with zero structural changes**.
 
-4. Attendance Analytics
-   * Attendance Rates by Event
-   * Member Participation Trends
+**How the refresh works:**
+```
+PSA releases new FIES cycle data (e.g., 2026)
+        ↓
+Download updated CSV exports from PSA OpenSTAT
+        ↓
+Replace source CSV files in the project data folder
+        ↓
+Dashboard reads the new files on next load — all charts update automatically
+        ↓
+No code changes required
+```
 
-5. Budget Monitoring
-   * Approved Budgets
-   * Budget Utilization
-   * Remaining Budget Allocation
+**Planned dashboard views:**
+1. **Regional Poverty Incidence Heatmap** — All 17 regions across all available survey years in a matrix view, color-coded from deep red (high poverty) to light green (low poverty). New survey years appear as new columns automatically when the source CSV is updated.
 
-6. Reports and Audit Tracking
-   * Financial Reports Summary
-   * Recent Transactions
-   * Audit Log Activities
+2. **Convergence Scatter Plot** — X-axis: poverty incidence in the earliest available year. Y-axis: total percentage-point drop to the most recent year. Each dot is a region. The chart redraws with the new baseline and endpoint whenever new data is loaded.
 
-## Expected Outcome
-The project will provide SJIT student organizations with a centralized financial analytics platform that improves transparency, streamlines record management, supports financial accountability, and enables data-driven decision-making for organizational operations.
+3. **Caraga Province-Level Breakdown** — Bar charts for Agusan del Norte, Agusan del Sur, Surigao del Norte, Surigao del Sur, and Dinagat Islands across all survey years. Shows which provinces drive Caraga's regional improvement and which are lagging.
+
+4. **Poverty Threshold vs. Poverty Incidence** — Line chart by region showing whether the cost of meeting basic needs is rising faster in poorer regions — a proxy for whether poverty is becoming harder or easier to escape over time.
+
+5. **Income Gap Trend Lines** — How far below the poverty threshold the average poor family remains, by region, across all survey years. A declining income gap signals shallower poverty, not just fewer poor people.
+
+**Stretch goal (post-Week 16):** Automate the CSV download step by querying the PSA OpenSTAT PX-Web API directly, so replacing the source file happens programmatically on each dashboard load rather than manually.
+
+
+## Scope Note
+This project covers all 17 Philippine regions, provincial-level breakdowns for Caraga specifically, and four FIES-based survey cycles: 2015, 2018, 2021, and 2023 — with the architecture ready to absorb the 2026 cycle. Analysis is descriptive; no predictive modeling is in scope. The goal is a clear, chart-driven answer to one question: are the poorest regions catching up, and where does Caraga stand in that story?
+
+*Milestone 0 — Problem Statement*
+*24-Week Data Analytics Foundations Program
