@@ -3,14 +3,12 @@
 
 ## Problem Statement (Summary)
 I want to answer: **"Which Philippine regions are closing the poverty gap fastest from 2015 to 2023 — and which ones are being left behind?"**
-
 *(Full problem statement, audience, KPIs, and dashboard design are in M0_README.md)*
 
----
+
 ## Week 2 — Data Source Discovery & Feasibility Check
 This document records the data sources I investigated this week, what I found inside them, how each one answers the problem statement, and which one I am committing to as my primary source — and why.
 
----
 
 ## Sources Investigated
 I evaluated three PSA sources this week. All are publicly accessible without registration or a data request form.
@@ -57,7 +55,6 @@ Every KPI defined in M0 is either directly published in this source or computabl
 - Table 5 and Table 6 (magnitude of poor) currently show data up to 2021 only. The 2023 magnitude figures are reported in the official PDF publication but have not yet been added to the OpenSTAT portal tables as of the time of this writing.
 - HUC-level data (Table 1a) starts from 2018 — Butuan City's poverty trend, for example, can only be tracked from 2018 forward, not from 2015.
 
----
 
 ### Source 2 — PSA Philippine Statistical Yearbook (PSY), Chapter 2: Income and Prices
 **URL:** https://psa.gov.ph/philippine-statistical-yearbook
@@ -113,7 +110,6 @@ This is a separate PSA release that uses the Small Area Estimation technique to 
 - Not a replacement for Source 1 at regional or provincial level; intended as a supplemental drill-down.
 - Will be incorporated in Weeks 8–12 for the Caraga province deep-dive section, not as a primary analysis source.
 
----
 
 ## Source Decision
 **Primary source: Source 1 — PSA OpenSTAT Full Year Poverty Statistics**
@@ -129,8 +125,6 @@ Selected as the fallback because it covers the same regional poverty data throug
 Neither failure affects the other. This is the intended redundancy.
 
 **Source 3 (SAE) is neither primary nor fallback** — it is a supplemental source reserved for municipality-level drill-down work in later milestones.
-
----
 
 ## Refresh Architecture
 The dashboard will run on a **semi-automated refresh model** matched to the PSA's three-year FIES cycle. When new data is released (next expected: 2026/2027):
@@ -154,8 +148,6 @@ The dashboard will run on a **semi-automated refresh model** matched to the PSA'
 - Full provincial data for the new cycle may not be available until 12–18 months after the survey year closes.
 
 **Stretch goal (post-Week 16):** Replace the manual CSV download step with a direct query to the PSA OpenSTAT PX-Web JSON API, making the refresh fully programmatic.
-
----
 
 *Milestone 0 — Problem Statement | Complete*
 *Milestone 1 — Data Source Discovery & Feasibility Check | Complete*
