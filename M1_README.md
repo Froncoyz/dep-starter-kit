@@ -101,5 +101,7 @@ numpy==1.26.4
 ---
 
 *Milestone 0 — Problem Statement | Complete*
+
 *Milestone 1 — Data Source Discovery & Feasibility Check | Complete*
+
 *24-Week Data Analytics Foundations Program*
