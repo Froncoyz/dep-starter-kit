@@ -18,9 +18,8 @@ incidence rates in 2015 and has since posted significant reductions.
 
 | Milestone | Description | Status |
 |---|---|---|
-| M0 | Problem Statement | ✅ Complete — see M0_README.md |
-| M1 | Data Source Discovery & Feasibility Check | ✅ Complete — see M1_README.md |
-| M2 | Repo Initialized & Dev Environment Setup | ✅ This week |
+M0 | Problem Statement | ✅ Complete — see M0_README.md → ✅ Complete
+M1 | Data Source Discovery & Feasibility Check | ✅ Complete — see M1_README.md → ✅ Complete
 
 ---
 ## Repo Structure
@@ -32,8 +31,6 @@ dep-starter-kit/
 ├── notebooks/        # Jupyter notebooks for exploration and analysis
 ├── output/           # Chart exports and report outputs
 ├── scripts/          # Python cleaning and analysis scripts
-├── M0_README.md      # Problem statement
-├── M1_README.md      # Data source discovery and feasibility check
 ├── README.md         # This file
 └── requirements.txt  # Python dependencies
 
@@ -41,11 +38,22 @@ dep-starter-kit/
 ---
 
 ## Data Source
-**Primary:** PSA Full Year Official Poverty Statistics
-https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1E__FY/?tablelist=true
 
-**Fallback:** PSA Philippine Statistical Yearbook, Chapter 2
-https://psa.gov.ph/system/files/psy/2_2023.xlsx
+### Primary Source
+- **Name:** PSA Full Year Official Poverty Statistics — OpenSTAT Portal
+- **URL:** https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/DB__1E__FY/?tablelist=true
+- **Format:** CSV/XLSX, exported directly from the PX-Web portal, no login required
+- **Coverage:** All 17 regions + provinces; survey years 2015, 2018, 2021, 2023; national/regional/provincial/HUC level
+- **Why it fits:** Authoritative source for poverty incidence, thresholds, income gap, and magnitude of poor by region — every KPI in the problem statement is exportable directly from here.
+- **Known limitations:** 2015 tables use 2006-based CPI vs. 2012-based CPI from 2018+ (thresholds not directly comparable); small-province estimates have unreliable coefficients of variation; magnitude tables lag behind incidence tables in coverage year.
+
+### Fallback Source
+- **Name:** PSA Philippine Statistical Yearbook (PSY), Chapter 2
+- **URL:** https://psa.gov.ph/system/files/psy/2_2023.xlsx
+- **Format:** XLSX, single-file direct download
+- **Coverage:** National/regional poverty and income tables, published annually
+- **Why it could still work:** Same underlying PSA data, delivered through a completely different access path (static file vs. portal), so a portal outage doesn't take out both sources.
+- **Known limitations:** Weaker provincial-level detail; merged cells/footnotes require more cleaning; lags one FIES cycle behind.
 
 ---
 
