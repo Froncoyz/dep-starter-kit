@@ -18,8 +18,8 @@ incidence rates in 2015 and has since posted significant reductions.
 
 | Milestone | Description | Status |
 |---|---|---|
-M0 | Problem Statement | ✅ Complete — see M0_README.md → ✅ Complete
-M1 | Data Source Discovery & Feasibility Check | ✅ Complete — see M1_README.md → ✅ Complete
+| M0 | Problem Statement | ✅ Complete |
+| M1 | Data Source Discovery & Feasibility Check | ✅ Complete |
 
 ---
 ## Repo Structure
